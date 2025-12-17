@@ -1,13 +1,10 @@
 import Link from 'next/link';
-import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { FileQuestion } from 'lucide-react';
 
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
-
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center space-y-6 sm:space-y-8 max-w-md">
           <div className="flex justify-center">

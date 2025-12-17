@@ -13,9 +13,9 @@ const nextConfig = {
   },
 
   // Optional: disable PWA in dev (you already have this)
-//   pwa: {
-//     disable: process.env.NODE_ENV === "development",
-//   },
+  pwa: {
+    disable: process.env.NODE_ENV === "development",
+  },
 };
 
 module.exports = nextConfig;

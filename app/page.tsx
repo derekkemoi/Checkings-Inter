@@ -1,67 +1,86 @@
+'use client';
+
 import Link from 'next/link';
-import { Header } from '@/components/layout/header';
+import { useEffect, useState } from 'react';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Shield, Zap, Lock, CheckCircle, FileText, Clock, TrendingUp, UserCheck, Search, FileCheck, Lightbulb, Star } from 'lucide-react';
-import { BASE_PRICE_USD } from '@/lib/constants';
+import { Shield, Zap, Lock, CheckCircle, FileText, Clock, TrendingUp, UserCheck, Search, FileCheck, Lightbulb, Star, ArrowRight, Users, Award, CreditCard } from 'lucide-react';
+import { BASE_PRICE_USD, BASE_PRICE_KES, CURRENCY_SYMBOLS } from '@/lib/constants';
 
 export default function Home() {
+  const [showStickyCta, setShowStickyCta] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowStickyCta(window.scrollY > 600);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
 
       <main className="flex-1">
         <section className="relative overflow-hidden py-16 sm:py-24 lg:py-32">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-green-50 dark:from-green-950/20 to-transparent" />
 
           <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl text-center">
-              <Badge className="mb-6" variant="secondary">
-                Trusted by 50,000+ Customers Worldwide
-              </Badge>
+            <div className="mx-auto max-w-5xl text-center">
+              <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-full">
+                <Award className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <span className="text-sm font-semibold text-green-700 dark:text-green-300">10,000+ Reports Delivered</span>
+              </div>
 
-              <h1 className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl mb-6 px-4">
-                Get Your{' '}
-                <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                  Credit Bureau Report
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl mb-6 px-4 leading-tight">
+                Instant CRB Status Check –{' '}
+                <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  Unlock Loans & Financial Freedom
                 </span>{' '}
-                in Minutes
+                in 60 Seconds
               </h1>
 
-              <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto px-4">
-                Instant access to your credit report for employment, loan applications,
-                and personal credit checks. Secure, fast, and reliable.
+              <p className="text-xl sm:text-2xl font-medium text-muted-foreground mb-10 max-w-3xl mx-auto px-4">
+                Get Your Full Credit Report – Trusted by Thousands Worldwide
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
-                <Button size="lg" asChild className="w-full sm:w-auto">
-                  <Link href="/register">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center px-4 mb-12">
+                <Button size="lg" asChild className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white text-lg py-6 px-10 h-auto shadow-lg shadow-green-600/30">
+                  <Link href="/register" className="flex items-center gap-2">
                     Get Your Report Now
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
-                  <Link href="#features">
-                    Learn More
+                    <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>
               </div>
 
-              <div className="mt-12 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground px-4">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>Instant Delivery</span>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-6 sm:gap-8 px-4">
+                <div className="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-lg shadow-sm border">
+                  <Shield className="h-6 w-6 text-green-600" />
+                  <span className="text-sm font-medium">Paystack Secure</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Lock className="h-5 w-5 text-green-500" />
-                  <span>Bank-Level Security</span>
+                <div className="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-lg shadow-sm border">
+                  <Lock className="h-6 w-6 text-green-600" />
+                  <span className="text-sm font-medium">Bank-Level Security</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-green-500" />
-                  <span>100% Confidential</span>
+                <div className="flex items-center gap-2 bg-white dark:bg-gray-900 px-4 py-2 rounded-lg shadow-sm border">
+                  <CheckCircle className="h-6 w-6 text-green-600" />
+                  <span className="text-sm font-medium">Instant Delivery</span>
+                </div>
+              </div>
+
+              <div className="mt-12 pt-8 border-t">
+                <p className="text-sm text-muted-foreground mb-4">Trusted by employers and financial institutions worldwide</p>
+                <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-xs font-semibold text-muted-foreground/60">
+                  <span>Major Banks</span>
+                  <span>Financial Institutions</span>
+                  <span>Employers</span>
+                  <span>Government Agencies</span>
+                  <span>Landlords</span>
                 </div>
               </div>
             </div>
@@ -71,69 +90,57 @@ export default function Home() {
         <section id="features" className="py-16 sm:py-20 lg:py-24 bg-muted/50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 px-4">Why Choose Our Service?</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto px-4">
-                The fastest and most reliable way to access your credit bureau report worldwide
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 px-4">Why Choose Our Service?</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+                The fastest and most reliable way to access your credit bureau report
               </p>
             </div>
 
-            <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-              <Card>
-                <CardHeader>
-                  <Zap className="h-10 w-10 text-primary mb-2" />
-                  <CardTitle>Instant Access</CardTitle>
-                  <CardDescription>
-                    Get your CRB report in minutes, not days. No waiting, no paperwork.
+            <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+              <Card className="border-2 hover:border-green-500 transition-all hover:shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <Zap className="h-8 w-8 text-green-600" />
+                  </div>
+                  <CardTitle className="text-xl mb-3">Instant Access – Results in 60 Seconds</CardTitle>
+                  <CardDescription className="text-base">
+                    No waiting, no paperwork. Get your complete report immediately.
                   </CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <Lock className="h-10 w-10 text-primary mb-2" />
-                  <CardTitle>Secure & Private</CardTitle>
-                  <CardDescription>
-                    Your data is encrypted and protected with bank-level security measures.
+              <Card className="border-2 hover:border-green-500 transition-all hover:shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                    <Shield className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <CardTitle className="text-xl mb-3">Bank-Level Security</CardTitle>
+                  <CardDescription className="text-base">
+                    Your data is encrypted and 100% confidential. Trusted by thousands.
                   </CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <FileText className="h-10 w-10 text-primary mb-2" />
-                  <CardTitle>Detailed Reports</CardTitle>
-                  <CardDescription>
-                    Comprehensive credit history including all your accounts and inquiries.
+              <Card className="border-2 hover:border-green-500 transition-all hover:shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                    <FileText className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <CardTitle className="text-xl mb-3">Detailed & Accurate Reports</CardTitle>
+                  <CardDescription className="text-base">
+                    Complete credit history, score, and analysis. Accepted everywhere.
                   </CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <Clock className="h-10 w-10 text-primary mb-2" />
-                  <CardTitle>24/7 Availability</CardTitle>
-                  <CardDescription>
+              <Card className="border-2 hover:border-green-500 transition-all hover:shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                    <Clock className="h-8 w-8 text-orange-600" />
+                  </div>
+                  <CardTitle className="text-xl mb-3">24/7 Availability</CardTitle>
+                  <CardDescription className="text-base">
                     Access your report anytime, anywhere from any device.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <TrendingUp className="h-10 w-10 text-primary mb-2" />
-                  <CardTitle>Credit Score</CardTitle>
-                  <CardDescription>
-                    View your credit score and understand what affects it.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CheckCircle className="h-10 w-10 text-primary mb-2" />
-                  <CardTitle>Verified & Trusted</CardTitle>
-                  <CardDescription>
-                    Officially recognized reports accepted by banks and employers.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -144,84 +151,82 @@ export default function Home() {
         <section id="how-it-works" className="py-16 sm:py-20 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <Badge className="mb-4" variant="outline">
-                Simple Process
-              </Badge>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 px-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 px-4">
                 Get Your Credit Report in 4 Simple Steps
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto px-4">
-                The entire process takes less than 2 minutes. Fast, secure, and completely digital.
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+                Less than 2 minutes from start to finish
               </p>
             </div>
 
-            <div className="max-w-5xl mx-auto">
-              <div className="grid gap-8 md:gap-12">
-                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start">
-                  <div className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 shrink-0">
-                    <span className="text-2xl sm:text-3xl font-bold text-primary">01</span>
+            <div className="max-w-4xl mx-auto">
+              <div className="grid gap-8 md:gap-10">
+                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-center">
+                  <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white shrink-0 shadow-lg">
+                    <div className="text-center">
+                      <UserCheck className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-1" />
+                      <span className="text-lg font-bold">1</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <UserCheck className="h-6 w-6 text-primary" />
-                      <h3 className="text-xl sm:text-2xl font-bold">Verify Your Identity</h3>
-                    </div>
-                    <p className="text-muted-foreground">
-                      Provide your national ID and personal information for secure verification. All data is encrypted using bank-level security protocols to protect your privacy.
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-2">Register & Verify</h3>
+                    <p className="text-lg text-muted-foreground">
+                      Quick sign-up with your ID. Secure and encrypted.
                     </p>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start">
-                  <div className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 shrink-0">
-                    <span className="text-2xl sm:text-3xl font-bold text-primary">02</span>
+                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-center">
+                  <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white shrink-0 shadow-lg">
+                    <div className="text-center">
+                      <CreditCard className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-1" />
+                      <span className="text-lg font-bold">2</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <Search className="h-6 w-6 text-primary" />
-                      <h3 className="text-xl sm:text-2xl font-bold">Search Credit Database</h3>
-                    </div>
-                    <p className="text-muted-foreground">
-                      Our system instantly searches all major Credit Reference Bureaus in your country to compile your complete credit information and history across multiple sources.
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-2">Make Secure Payment</h3>
+                    <p className="text-lg text-muted-foreground">
+                      Pay instantly via Paystack. All major cards accepted.
                     </p>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start">
-                  <div className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 shrink-0">
-                    <span className="text-2xl sm:text-3xl font-bold text-primary">03</span>
+                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-center">
+                  <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 text-white shrink-0 shadow-lg">
+                    <div className="text-center">
+                      <FileCheck className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-1" />
+                      <span className="text-lg font-bold">3</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <FileCheck className="h-6 w-6 text-primary" />
-                      <h3 className="text-xl sm:text-2xl font-bold">Generate Your Report</h3>
-                    </div>
-                    <p className="text-muted-foreground">
-                      Receive a comprehensive report with your credit score, complete payment history, active loans, and detailed credit analysis within minutes of payment confirmation.
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-2">Instant Report Generation</h3>
+                    <p className="text-lg text-muted-foreground">
+                      Your complete report ready in 60 seconds or less.
                     </p>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-start">
-                  <div className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 shrink-0">
-                    <span className="text-2xl sm:text-3xl font-bold text-primary">04</span>
+                <div className="grid md:grid-cols-[auto,1fr] gap-6 items-center">
+                  <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 text-white shrink-0 shadow-lg">
+                    <div className="text-center">
+                      <TrendingUp className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-1" />
+                      <span className="text-lg font-bold">4</span>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <Lightbulb className="h-6 w-6 text-primary" />
-                      <h3 className="text-xl sm:text-2xl font-bold">Understand Your Credit</h3>
-                    </div>
-                    <p className="text-muted-foreground">
-                      Get clear insights into your credit standing with easy-to-understand explanations of what affects your score and actionable steps to maintain or improve your creditworthiness.
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-2">Download & Use</h3>
+                    <p className="text-lg text-muted-foreground">
+                      Print, share, or use for loans and employment immediately.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-12 text-center">
-                <Button size="lg" asChild>
-                  <Link href="/register">
-                    Start Your Application Now
+              <div className="mt-16 text-center">
+                <Button size="lg" asChild className="bg-green-600 hover:bg-green-700 text-white px-8">
+                  <Link href="/register" className="flex items-center gap-2">
+                    Start Your Check Now
+                    <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>
               </div>
@@ -232,14 +237,11 @@ export default function Home() {
         <section id="reviews" className="py-16 sm:py-20 lg:py-24 bg-muted/50 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
             <div className="text-center">
-              <Badge className="mb-4" variant="outline">
-                Customer Reviews
-              </Badge>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 px-4">
-                Trusted by Customers Worldwide
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 px-4">
+                Trusted by Thousands of Customers Worldwide
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto px-4">
-                See what our customers from around the globe say about their experience
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+                Real reviews from real customers who got their reports instantly
               </p>
             </div>
           </div>
@@ -247,48 +249,34 @@ export default function Home() {
           <div className="relative">
             <div className="flex gap-4 animate-scroll">
               {[...Array(2)].flatMap(() => [
-                { name: "James Wilson", country: "USA", rating: 5, review: "Received my report in under 3 minutes! Very fast and professional service. Highly recommend for anyone applying for a loan." },
-                { name: "Sarah Johnson", country: "UK", rating: 5, review: "The process was straightforward and the report was detailed. Helped me understand my credit standing better." },
-                { name: "Michael Chen", country: "Singapore", rating: 5, review: "Excellent service! Got my report instantly. The customer support team was very helpful." },
-                { name: "Emma Thompson", country: "Canada", rating: 4, review: "Quick and reliable. Used it for my job application and it was accepted everywhere I submitted it." },
-                { name: "Hans Mueller", country: "Germany", rating: 5, review: "Outstanding service! Clean interface, fast delivery, and very affordable pricing." },
-                { name: "Priya Sharma", country: "India", rating: 5, review: "I was skeptical at first but the service exceeded my expectations. Very secure and professional." },
-                { name: "David Martinez", country: "Mexico", rating: 5, review: "Got my report within 2 minutes of payment. The detailed breakdown helped me improve my score." },
-                { name: "Sophie Anderson", country: "Australia", rating: 4, review: "Easy to use platform. The report format is clear and accepted by all financial institutions." },
-                { name: "Ahmed Hassan", country: "UAE", rating: 5, review: "Impressed by the speed and accuracy. Will definitely use again when I need to update my report." },
-                { name: "Lucas Silva", country: "Brazil", rating: 5, review: "The entire process was seamless. From registration to receiving the report, everything worked perfectly." },
-                { name: "Park Ji-woo", country: "South Korea", rating: 5, review: "Very transparent pricing with no hidden fees. The report was comprehensive and easy to understand." },
-                { name: "Emily Roberts", country: "USA", rating: 4, review: "Great service for checking credit status. Helped me identify and resolve issues with my credit record." },
-                { name: "Oliver Brown", country: "UK", rating: 5, review: "Fastest report I've ever gotten. Customer service responded to my questions immediately." },
-                { name: "Fatima Al-Rashid", country: "UAE", rating: 5, review: "Highly recommended! The security measures gave me confidence to share my personal information." },
-                { name: "William Davis", country: "Canada", rating: 5, review: "Used it for my mortgage application. The bank accepted it without any questions. Professional service!" },
-                { name: "Thandiwe Nkosi", country: "South Africa", rating: 4, review: "Simple and efficient. Got exactly what I needed for my tenant verification process." },
-                { name: "Raj Patel", country: "India", rating: 5, review: "The report helped me understand why my loan application was rejected. Now working on improving my score." },
-                { name: "Isabella Schmidt", country: "Germany", rating: 5, review: "Excellent experience from start to finish. The platform is user-friendly and secure." },
-                { name: "Robert Taylor", country: "Australia", rating: 5, review: "Got my report at 11 PM! 24/7 service is a game changer. Very convenient and reliable." },
-                { name: "Maria Gonzalez", country: "Mexico", rating: 4, review: "Good value for money. The report contained all the information I needed for my credit check." },
-                { name: "Thomas White", country: "USA", rating: 5, review: "Professional and trustworthy service. The report was comprehensive and delivered instantly." },
-                { name: "Amara Okafor", country: "South Africa", rating: 5, review: "Best decision I made! Knowing my credit score helped me negotiate better loan terms." },
-                { name: "Daniel Lee", country: "Singapore", rating: 5, review: "Quick, secure, and affordable. Everything you need in a credit report service. Highly satisfied!" },
-                { name: "Charlotte Moore", country: "UK", rating: 4, review: "The detailed credit analysis was very helpful. Now I understand what affects my credit score." },
-                { name: "Carlos Fernandez", country: "Brazil", rating: 5, review: "Used it for employment verification. The employer was impressed with how quickly I provided it." },
-                { name: "Yuki Tanaka", country: "South Korea", rating: 5, review: "Top-notch service! The report format is professional and accepted by all institutions." },
-                { name: "Benjamin Clark", country: "Canada", rating: 5, review: "Fast, reliable, and secure. Got my report in minutes. Will recommend to friends and family." },
-                { name: "Aisha Mohammed", country: "UAE", rating: 4, review: "Great platform for checking your credit status. The insights provided were very valuable." },
-                { name: "James Kamau", country: "Kenya", rating: 5, review: "Seamless experience! From payment to report delivery, everything was smooth and professional." },
-                { name: "Anjali Mehta", country: "India", rating: 5, review: "Absolutely fantastic service! Helped me clean up my credit record by identifying errors. Thank you!" },
+                { name: "Peter Kamau", location: "Nairobi, Kenya", rating: 5, review: "Got my CRB report in 2 minutes! Used it for my KCB loan application and was approved same day. Best service ever!" },
+                { name: "Grace Wanjiru", location: "Mombasa, Kenya", rating: 5, review: "I needed a report urgently for a job interview. Got it instantly! The employer was impressed with how fast I provided it." },
+                { name: "John Ochieng", location: "Kisumu, Kenya", rating: 5, review: "Very professional service. Helped me understand my credit score and why my previous loan was rejected. Highly recommended!" },
+                { name: "Mary Akinyi", location: "Nairobi, Kenya", rating: 5, review: "Fast, secure, and affordable! I was skeptical at first but the report was genuine and accepted by Equity Bank without any issues." },
+                { name: "David Mwangi", location: "Nakuru, Kenya", rating: 5, review: "Excellent! Paid via M-Pesa through Paystack and got my report immediately. No hassles, no delays. Worth every shilling." },
+                { name: "James Wilson", location: "USA", rating: 5, review: "Received my report in under 3 minutes! Very fast and professional service. Highly recommend for anyone applying for a loan." },
+                { name: "Sarah Johnson", location: "UK", rating: 5, review: "The process was straightforward and the report was detailed. Helped me understand my credit standing better." },
+                { name: "Michael Chen", location: "Singapore", rating: 5, review: "Excellent service! Got my report instantly. The customer support team was very helpful." },
+                { name: "Emma Thompson", location: "Canada", rating: 5, review: "Quick and reliable. Used it for my job application and it was accepted everywhere I submitted it." },
+                { name: "Ahmed Hassan", location: "UAE", rating: 5, review: "Impressed by the speed and accuracy. Will definitely use again when I need to update my report." },
+                { name: "Sophie Anderson", location: "Australia", rating: 5, review: "Easy to use platform. The report format is clear and accepted by all financial institutions." },
+                { name: "Raj Patel", location: "India", rating: 5, review: "The report helped me understand why my loan application was rejected. Now working on improving my score." },
+                { name: "William Davis", location: "Canada", rating: 5, review: "Used it for my mortgage application. The bank accepted it without any questions. Professional service!" },
+                { name: "Thandiwe Nkosi", location: "South Africa", rating: 5, review: "Simple and efficient. Got exactly what I needed for my tenant verification process." },
+                { name: "Thomas White", location: "USA", rating: 5, review: "Professional and trustworthy service. The report was comprehensive and delivered instantly." },
               ]).map((review, index) => (
-                <Card key={index} className="shrink-0 w-[350px] sm:w-[400px]">
+                <Card key={index} className="shrink-0 w-[350px] sm:w-[400px] border-2">
                   <CardHeader>
                     <div className="flex items-start gap-4">
-                      <Avatar>
-                        <AvatarFallback className="bg-primary text-primary-foreground">
+                      <Avatar className="h-12 w-12">
+                        <AvatarFallback className="bg-green-600 text-white font-semibold">
                           {review.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-base">{review.name}</CardTitle>
-                        <div className="flex gap-1 mt-1">
+                        <CardTitle className="text-base font-bold">{review.name}</CardTitle>
+                        <p className="text-xs text-muted-foreground">{review.location}</p>
+                        <div className="flex gap-1 mt-2">
                           {Array.from({ length: review.rating }).map((_, i) => (
                             <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                           ))}
@@ -297,7 +285,7 @@ export default function Home() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{review.review}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{review.review}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -305,16 +293,81 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="faq" className="py-16 sm:py-20 lg:py-24">
+        <section id="pricing" className="py-16 sm:py-20 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <Badge className="mb-4" variant="outline">
-                FAQ
-              </Badge>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 px-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 px-4">Simple, Transparent Pricing</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+                One-time payment for instant access to your complete credit report
+              </p>
+            </div>
+
+            <div className="max-w-md mx-auto px-4">
+              <div className="relative">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                  <Badge className="bg-green-600 text-white px-4 py-1 text-sm font-bold">MOST POPULAR</Badge>
+                </div>
+                <Card className="border-4 border-green-600 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-green-600/10 rounded-full -mr-16 -mt-16"></div>
+                  <CardHeader className="text-center pb-8 pt-10">
+                    <CardTitle className="text-3xl font-bold">Complete Credit Report</CardTitle>
+                    <div className="mt-6 space-y-2">
+                      <div className="text-6xl font-bold text-green-600">${BASE_PRICE_USD}</div>
+                      <div className="text-2xl font-semibold text-muted-foreground">
+                        or {CURRENCY_SYMBOLS.KES} {BASE_PRICE_KES}
+                      </div>
+                    </div>
+                    <CardDescription className="mt-4 text-base font-medium">
+                      One-time payment • Instant delivery • No subscription
+                    </CardDescription>
+                    <div className="mt-4 inline-flex items-center gap-2 bg-orange-100 dark:bg-orange-900/30 px-4 py-2 rounded-full">
+                      <Clock className="h-4 w-4 text-orange-600" />
+                      <span className="text-sm font-semibold text-orange-700 dark:text-orange-300">Instant Access – No Waiting</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6 pb-8">
+                    <ul className="space-y-4">
+                      {[
+                        'Complete credit history & score',
+                        'All account details & inquiries',
+                        'Payment history analysis',
+                        'Instant digital delivery (60 seconds)',
+                        'Download & print unlimited times',
+                        'Accepted by all banks & employers',
+                        '24/7 access from any device',
+                        'Bank-level security & encryption',
+                      ].map((feature) => (
+                        <li key={feature} className="flex items-start gap-3">
+                          <CheckCircle className="h-6 w-6 text-green-600 shrink-0 mt-0.5" />
+                          <span className="text-base">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white h-14 text-lg font-bold shadow-lg" size="lg" asChild>
+                      <Link href="/register" className="flex items-center gap-2">
+                        Get Your Report Now
+                        <ArrowRight className="h-5 w-5" />
+                      </Link>
+                    </Button>
+
+                    <p className="text-center text-sm text-muted-foreground">
+                      Trusted by 10,000+ customers • Secure payment via Paystack
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="py-16 sm:py-20 lg:py-24 bg-muted/50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12 sm:mb-16">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 px-4">
                 Frequently Asked Questions
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto px-4">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto px-4">
                 Everything you need to know about our credit report service
               </p>
             </div>
@@ -464,57 +517,25 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        <section id="pricing" className="py-16 sm:py-20 lg:py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 px-4">Simple, Transparent Pricing</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto px-4">
-                One-time payment for instant access to your complete credit report
-              </p>
-            </div>
-
-            <div className="max-w-md mx-auto px-4">
-              <Card className="border-2 border-primary">
-                <CardHeader className="text-center pb-8">
-                  <CardTitle className="text-2xl">Credit Report</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-5xl font-bold">${BASE_PRICE_USD}</span>
-                  </div>
-                  <CardDescription className="mt-2">
-                    One-time payment, instant delivery
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-3">
-                    {[
-                      'Full credit history',
-                      'Current credit score',
-                      'All account details',
-                      'Credit inquiries',
-                      'Payment history',
-                      'Instant digital delivery',
-                      'Valid for official use',
-                      '24/7 access',
-                    ].map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button className="w-full" size="lg" asChild>
-                    <Link href="/register">
-                      Get Your Report Now
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
+
+      {showStickyCta && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white dark:bg-gray-900 border-t shadow-2xl animate-in slide-in-from-bottom">
+          <div className="container mx-auto max-w-4xl flex items-center justify-between gap-4">
+            <div className="hidden sm:block">
+              <p className="font-bold text-lg">Ready to check your credit status?</p>
+              <p className="text-sm text-muted-foreground">Get your complete report in 60 seconds</p>
+            </div>
+            <Button size="lg" asChild className="bg-green-600 hover:bg-green-700 text-white font-bold shadow-lg whitespace-nowrap">
+              <Link href="/register" className="flex items-center gap-2">
+                Get Report Now
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
+
 
       <Footer />
     </div>

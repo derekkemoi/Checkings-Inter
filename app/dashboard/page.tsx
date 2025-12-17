@@ -3,17 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { Header } from '@/components/layout/header';
 import { ProtectedRoute } from '@/components/auth/protected-route';
+import { Footer } from '@/components/layout/footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuthStore } from '@/store/useAuthStore';
 import { db } from '@/lib/firebase';
-import { BASE_PRICE_USD } from '@/lib/constants';
+import { formatPrice } from '@/lib/price-utils';
 import type { User } from '@/types';
-import { FileText, CheckCircle, Clock, User as UserIcon, MapPin, CreditCard, ArrowRight } from 'lucide-react';
+import { FileText, CheckCircle, Clock, User as UserIcon, MapPin, CreditCard, ArrowRight, Shield, Mail, Edit } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
@@ -42,12 +43,16 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, [authUser]);
 
+  const getInitials = () => {
+    if (!userData) return 'U';
+    return `${userData.firstName.charAt(0)}${userData.secondName.charAt(0)}`.toUpperCase();
+  };
+
   if (loading) {
     return (
       <ProtectedRoute>
         <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <div className="space-y-6">
               <Skeleton className="h-12 w-64" />
               <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -65,213 +70,263 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen flex-col">
-        <Header />
-
-        <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-              Welcome back, {userData?.firstName}!
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base">
-              Manage your CRB reports and account information
-            </p>
+      <div className="flex min-h-screen flex-col bg-gradient-to-b from-green-50 dark:from-green-950/20 to-transparent">
+        <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 max-w-7xl">
+          <div className="mb-8">
+            <Card className="border-2 shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 sm:px-8 py-6">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <Avatar className="h-20 w-20 border-4 border-white shadow-lg">
+                    <AvatarFallback className="bg-green-800 text-white text-2xl font-bold">
+                      {getInitials()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-center sm:text-left flex-1">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                      Welcome back, {userData?.firstName}!
+                    </h1>
+                    <p className="text-green-50">
+                      Manage your CRB reports and account information
+                    </p>
+                  </div>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => router.push('/profile')}
+                    className="bg-white hover:bg-green-50 text-green-700"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                </div>
+              </div>
+            </Card>
           </div>
 
-          <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Payment Status</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-3 mb-8">
+            <Card className="border-2 shadow-lg">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base font-semibold">Payment Status</CardTitle>
+                  <div className="p-2 rounded-full bg-green-100 dark:bg-green-900">
+                    <CreditCard className="h-5 w-5 text-green-600" />
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mb-2">
                   {userData?.paymentMade ? (
                     <>
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <Badge variant="default">Paid</Badge>
+                      <CheckCircle className="h-6 w-6 text-green-600" />
+                      <Badge className="bg-green-600 text-white">Paid</Badge>
                     </>
                   ) : (
                     <>
-                      <Clock className="h-5 w-5 text-yellow-500" />
-                      <Badge variant="secondary">Pending</Badge>
+                      <Clock className="h-6 w-6 text-orange-500" />
+                      <Badge variant="outline" className="border-orange-500 text-orange-600">Pending</Badge>
                     </>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground">
                   {userData?.paymentMade
-                    ? 'Your payment has been confirmed'
-                    : 'Complete payment to access your report'}
+                    ? 'Payment confirmed successfully'
+                    : 'Complete payment to access report'}
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Report Status</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
+            <Card className="border-2 shadow-lg">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base font-semibold">Report Status</CardTitle>
+                  <div className="p-2 rounded-full bg-green-100 dark:bg-green-900">
+                    <FileText className="h-5 w-5 text-green-600" />
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mb-2">
                   {userData?.paymentMade ? (
                     <>
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <Badge variant="default">Ready</Badge>
+                      <CheckCircle className="h-6 w-6 text-green-600" />
+                      <Badge className="bg-green-600 text-white">Ready</Badge>
                     </>
                   ) : (
                     <>
-                      <Clock className="h-5 w-5 text-muted-foreground" />
+                      <Clock className="h-6 w-6 text-muted-foreground" />
                       <Badge variant="outline">Not Available</Badge>
                     </>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground">
                   {userData?.paymentMade
                     ? 'Your CRB report is ready to view'
-                    : 'Report will be available after payment'}
+                    : 'Report available after payment'}
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Account Info</CardTitle>
-                <UserIcon className="h-4 w-4 text-muted-foreground" />
+            <Card className="border-2 shadow-lg">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base font-semibold">Account Security</CardTitle>
+                  <div className="p-2 rounded-full bg-green-100 dark:bg-green-900">
+                    <Shield className="h-5 w-5 text-green-600" />
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {userData?.firstName} {userData?.secondName}
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="h-6 w-6 text-green-600" />
+                  <Badge className="bg-green-600 text-white">Verified</Badge>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  ID: {userData?.idNumber}
+                <p className="text-sm text-muted-foreground">
+                  Your account is secure and verified
                 </p>
               </CardContent>
             </Card>
           </div>
 
           {userData?.paymentMade ? (
-            <Card className="bg-gradient-to-br from-primary/10 to-blue-500/10 border-primary/20">
-              <CardHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="h-6 w-6 text-green-500" />
-                  <Badge variant="default">Report Ready</Badge>
-                </div>
-                <CardTitle className="text-2xl">Your CRB Report is Ready!</CardTitle>
-                <CardDescription>
-                  View your complete credit bureau report with detailed credit history and score
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="flex items-start gap-3">
-                      <FileText className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="font-medium text-sm">Complete Credit History</p>
-                        <p className="text-xs text-muted-foreground">
-                          All your accounts and payment records
-                        </p>
-                      </div>
+            <Card className="border-2 shadow-xl mb-8 overflow-hidden">
+              <div className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 px-6 sm:px-8 py-8">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle className="h-7 w-7 text-green-600" />
+                      <Badge className="bg-green-600 text-white text-sm px-3 py-1">Report Ready</Badge>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="font-medium text-sm">Credit Score</p>
-                        <p className="text-xs text-muted-foreground">
-                          Your current credit rating
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                    <h2 className="text-3xl font-bold mb-3">Your CRB Report is Ready!</h2>
+                    <p className="text-muted-foreground text-lg mb-6">
+                      View your complete credit bureau report with detailed credit history, score analysis, and personalized recommendations.
+                    </p>
 
-                  <Button asChild size="lg" className="w-full sm:w-auto">
-                    <Link href="/report">
-                      View Full Report
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
+                    <div className="grid gap-4 sm:grid-cols-2 mb-6">
+                      <div className="flex items-start gap-3 p-4 bg-white dark:bg-gray-900 rounded-lg border">
+                        <FileText className="h-6 w-6 text-green-600 mt-0.5" />
+                        <div>
+                          <p className="font-semibold mb-1">Complete Credit History</p>
+                          <p className="text-sm text-muted-foreground">
+                            All your accounts and payment records
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-4 bg-white dark:bg-gray-900 rounded-lg border">
+                        <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
+                        <div>
+                          <p className="font-semibold mb-1">Credit Score Analysis</p>
+                          <p className="text-sm text-muted-foreground">
+                            Your current credit rating and insights
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 h-12 text-base font-semibold w-full sm:w-auto">
+                      <Link href="/report">
+                        View Full Report
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
-              </CardContent>
+              </div>
             </Card>
           ) : (
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock className="h-6 w-6 text-yellow-500" />
-                  <Badge variant="secondary">Payment Required</Badge>
-                </div>
-                <CardTitle className="text-2xl">Complete Your Payment</CardTitle>
-                <CardDescription>
-                  Your CRB report will be available immediately after successful payment
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 text-sm text-yellow-900 dark:text-yellow-100">
-                    To access your credit bureau report, please complete the payment of ${BASE_PRICE_USD}
-                  </div>
+            <Card className="border-2 shadow-xl mb-8 overflow-hidden">
+              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-950 dark:to-yellow-900 px-6 sm:px-8 py-8">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Clock className="h-7 w-7 text-orange-600" />
+                      <Badge variant="outline" className="border-orange-500 text-orange-600 text-sm px-3 py-1">Payment Required</Badge>
+                    </div>
+                    <h2 className="text-3xl font-bold mb-3">Complete Your Payment</h2>
+                    <p className="text-muted-foreground text-lg mb-6">
+                      Your CRB report will be available immediately after successful payment. Get instant access to your complete credit history.
+                    </p>
 
-                  <Button asChild size="lg" className="w-full sm:w-auto">
-                    <Link href="/payment">
-                      Complete Payment
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
+                    <div className="bg-white dark:bg-gray-900 border-2 border-orange-200 rounded-lg p-5 mb-6">
+                      <div className="flex items-center justify-between flex-wrap gap-4">
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">Payment Amount</p>
+                          <p className="text-3xl font-bold text-green-600">
+                            {userData?.country ? formatPrice(userData.country) : '...'}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-muted-foreground mb-1">Processing Time</p>
+                          <p className="text-xl font-bold">Instant</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 h-12 text-base font-semibold w-full sm:w-auto">
+                      <Link href="/payment">
+                        Complete Payment Now
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
-              </CardContent>
+              </div>
             </Card>
           )}
 
-          <div className="mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Information</CardTitle>
-                <CardDescription>Personal details associated with your account</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex items-center gap-3">
-                    <UserIcon className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium">Name</p>
-                      <p className="text-sm text-muted-foreground">
-                        {userData?.firstName} {userData?.secondName}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium">ID Number</p>
-                      <p className="text-sm text-muted-foreground">{userData?.idNumber}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium">Country</p>
-                      <p className="text-sm text-muted-foreground">{userData?.country}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <UserIcon className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-sm font-medium">Email</p>
-                      <p className="text-sm text-muted-foreground">{userData?.email}</p>
-                    </div>
+          <Card className="border-2 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Your Information</CardTitle>
+              <CardDescription className="text-base">Personal details associated with your account</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                  <UserIcon className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Full Name</p>
+                    <p className="font-semibold">
+                      {userData?.firstName} {userData?.secondName}
+                    </p>
                   </div>
                 </div>
 
-                <Button asChild variant="outline" className="mt-6">
-                  <Link href="/profile">Edit Profile</Link>
+                <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                  <Mail className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Email Address</p>
+                    <p className="font-semibold">{userData?.email}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                  <FileText className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">ID Number</p>
+                    <p className="font-semibold">{userData?.idNumber}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                  <MapPin className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Country</p>
+                    <p className="font-semibold">{userData?.country}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <Button asChild variant="outline" size="lg" className="flex-1 sm:flex-none">
+                  <Link href="/profile">
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Profile
+                  </Link>
                 </Button>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </main>
+        <Footer />
       </div>
     </ProtectedRoute>
   );

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Header } from '@/components/layout/header';
 import { ProtectedRoute } from '@/components/auth/protected-route';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,7 +29,7 @@ export default function VerifyPage() {
     const verify = async () => {
       try {
         const response = await verifyPayment(reference, user.uid);
-        console.log('Verification response:', response);
+
         if (response.success) {
           setStatus('success');
         } else {
@@ -47,8 +46,6 @@ export default function VerifyPage() {
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen flex-col">
-        <Header />
-
         <main className="flex-1 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center px-4 sm:px-6">

@@ -39,8 +39,6 @@ export const verifyPayment = async (reference: string, uid: string) => {
     body: JSON.stringify({ reference, uid }),
   });
 
-  console.log('Verify payment response status:', response.ok);
-
   if (!response.ok) {
     throw new Error('Payment verification failed');
   }
