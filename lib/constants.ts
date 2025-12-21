@@ -1,4 +1,4 @@
-export const BASE_PRICE_USD = 2;
+export const BASE_PRICE_USD = 3.99;
 export const USD_TO_KES_RATE = 100;
 export const BASE_PRICE_KES = Math.floor(BASE_PRICE_USD * USD_TO_KES_RATE);
 
