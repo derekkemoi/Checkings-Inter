@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { Toaster } from "sonner";
 import { Header } from "@/components/layout/header";
+import Script from "next/script";
 import LimitedOfferBanner from "@/components/LimitedOfferBanner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,6 +23,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* Google Ads Tag */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-17850051668"
+        strategy="afterInteractive"
+      />
+
+      <Script id="google-ads-tag" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-17850051668');
+        `}
+      </Script>
+
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
