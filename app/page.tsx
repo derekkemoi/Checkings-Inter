@@ -45,9 +45,30 @@ export default function Home() {
                 in 60 Seconds
               </h1>
 
-              <p className="text-xl sm:text-2xl font-medium text-muted-foreground mb-10 max-w-3xl mx-auto px-4">
+              <p className="text-xl sm:text-2xl font-medium text-muted-foreground mb-8 max-w-3xl mx-auto px-4">
                 Get Your Full Credit Report – Trusted by Thousands Worldwide
               </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10 px-4">
+                <div className="flex items-center gap-3 bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border-2 border-green-200 hover:border-green-400 transition-colors">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-semibold text-base text-gray-900 dark:text-gray-100">Check Blacklist Status</p>
+                    <p className="text-sm text-muted-foreground">Know if you're blacklisted from borrowing</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border-2 border-blue-200 hover:border-blue-400 transition-colors">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                    <TrendingUp className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-semibold text-base text-gray-900 dark:text-gray-100">Know Your Limit</p>
+                    <p className="text-sm text-muted-foreground">See how much loan you can borrow</p>
+                  </div>
+                </div>
+              </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center px-4 mb-12">
                 <Button size="lg" asChild className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white text-lg py-6 px-10 h-auto shadow-lg shadow-green-600/30">
