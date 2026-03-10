@@ -33,14 +33,14 @@ export default function LimitedOfferBanner() {
 
     const calculateTimeLeft = () => {
       const now = new Date();
-      const endOfJanuary = new Date(now.getFullYear(), 0, 31, 23, 59, 59);
+      const endOfMarch = new Date(now.getFullYear(), 2, 31, 23, 59, 59);
 
-      if (now > endOfJanuary) {
+      if (now > endOfMarch) {
         setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
         return;
       }
 
-      const difference = endOfJanuary.getTime() - now.getTime();
+      const difference = endOfMarch.getTime() - now.getTime();
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -81,22 +81,22 @@ export default function LimitedOfferBanner() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-2 flex-shrink-0">
             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 animate-pulse" />
-            <span className="text-xs sm:text-sm font-bold text-blue-600 uppercase tracking-wide">New Year Special</span>
+            <span className="text-xs sm:text-sm font-bold text-blue-600 uppercase tracking-wide">March Deal</span>
           </div>
 
           <div className="flex-1 overflow-hidden">
             <div className="animate-marquee whitespace-nowrap">
               <span className="inline-block text-sm sm:text-base md:text-lg font-semibold text-gray-800 mx-4 sm:mx-8">
-                Limited Time February Offer! Get Your Full CRB Report for Only <span className="text-blue-600 font-bold">{offerPrice}</span> – Save 60%!
+                March Special: Get Your Full CRB Report for Only <span className="text-blue-600 font-bold">{offerPrice}</span> – Save 60%!
               </span>
               <span className="inline-block text-sm sm:text-base md:text-lg font-semibold text-gray-800 mx-4 sm:mx-8">
-                New Year Special: Complete Credit Report Just <span className="text-purple-600 font-bold">{offerPrice}</span> – Limited Time Only!
+                End of Q1 Deal: Complete Credit Report Just <span className="text-purple-600 font-bold">{offerPrice}</span> – Limited Time Only!
               </span>
               <span className="inline-block text-sm sm:text-base md:text-lg font-semibold text-gray-800 mx-4 sm:mx-8">
-                Start 2026 Right: Full CRB Status Check for Only <span className="text-blue-600 font-bold">{offerPrice}</span> – Don&apos;t Miss Out!
+                Spring into Success: Full CRB Status Check for Only <span className="text-blue-600 font-bold">{offerPrice}</span> – Don't Miss Out!
               </span>
               <span className="inline-block text-sm sm:text-base md:text-lg font-semibold text-gray-800 mx-4 sm:mx-8">
-                Limited Time February Offer! Get Your Full CRB Report for Only <span className="text-blue-600 font-bold">{offerPrice}</span> – Save 60%!
+                March Special: Get Your Full CRB Report for Only <span className="text-blue-600 font-bold">{offerPrice}</span> – Save 60%!
               </span>
             </div>
           </div>
