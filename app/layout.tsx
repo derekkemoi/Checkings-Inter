@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { AuthProvider } from '@/components/providers/auth-provider';
 import { Toaster } from 'sonner';
@@ -11,7 +12,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'CRB Checker - Get Your Credit Report Instantly',
-  description: 'Access your Credit Bureau Report instantly. Trusted for employment, loans, and personal credit checks in Kenya.',
+  description:
+    'Access your Credit Bureau Report instantly. Trusted for employment, loans, and personal credit checks in Kenya.',
 };
 
 export default function RootLayout({
@@ -21,6 +23,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+
+      {/* Google Ads Tag */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18005832331"
+        strategy="afterInteractive"
+      />
+      <Script id="google-ads-tag" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-18005832331');
+        `}
+      </Script>
+
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
